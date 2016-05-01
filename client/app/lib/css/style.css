@@ -755,8 +755,12 @@ ul
 
 /*////////////////////////////////*/
 
-md-input-container > input {
-		widht: 100%;
+md-input-container{
+    align:auto;
+}
+
+md-input-container >input {
+		min-width: 100%;
 }
 md-input-container > md-select {
     margin-top: 0;
@@ -785,4 +789,23 @@ md-input-container > md-radio-group > md-radio-button {
 		width: 100%;
 		margin-top: 30px;
 		
+    
 }
+
+.btn-custom{
+  width: 100%;
+  margin: auto;
+  margin-top: 15px
+    
+}
+
+.policyNote{
+    color:#95a5a6;
+    font-size:x-small;
+    
+}
+.md-select-menu-container {
+    z-index:1060;
+}
+
+ 

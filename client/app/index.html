@@ -16,14 +16,16 @@
 		
 		<link rel="stylesheet" href="lib/css/bootstrap.css">
 		<link rel="stylesheet" href="lib/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
 		<link rel="stylesheet" href="lib/css/style.css">
-		<link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+		
 		<!-- <link rel="stylesheet" href="lib/js/angular-material/layouts/angular-material.layouts.css"> -->
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=Crimson+Text:600' rel='stylesheet' type='text/css'>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/plugins/debug.addIndicators.min.js"></script>
+    
 		
 	</head>
 	
@@ -113,31 +115,36 @@
 	<div class="form-header text-center">Login</div>
 	<div class="row">
 		<div class="col-md-6">
-			<form ng-submit="submitLogin()" method="post" id="loginForm" name="loginForm" autocomplete="off">
+			<form ng-submit="submitLogin()" id="loginForm" name="loginForm" autocomplete="off" >
 				
 				
-				<md-input-container>
+				<md-input-container class="md-block">
 					<label >Email Id/Username</label>
-					<input type="text" id="logInEmail" ng-model="user.logInEmail" ng-required="true" >
-					<div ng-messages="loginForm.logInEmail.$error">
+					<input type="text" id="logInEmail" name="logInEmail" ng-model="user.logInEmail" ng-required="true">
+					<div ng-messages="loginForm.logInEmail.$error" ng-show="loginForm.logInEmail.$touched">
 						<div ng-message="required">Email Id is required.</div>
 					</div>
 				</md-input-container>
 				
-				<md-input-container>
+				<md-input-container class="md-block">
 					<label for="InputPassword">Password</label>
-					<input type="password" id="logInPassword" ng-model="user.logInPassword" ng-required="true">
-					<div ng-messages="loginForm.logInPassword.$error">
+					<input type="password" id="logInPassword" name="logInPassword" ng-model="user.logInPassword" minlength="4" ng-required="true">
+					<div ng-messages="loginForm.logInPassword.$error" ng-show="loginForm.logInPassword.$touched">
 						<div ng-message="required">Password is required.</div>
+            <div ng-message="minlength">Password is too short!</div>
 					</div>
-				</md-input-container>					
+				</md-input-container>
 				
-				<label for="remember" class="btn-link">
+        <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="user.rememberMe" class="md-primary">
+          Remember me
+        </md-checkbox>
+        
+				<!-- <label for="remember" class="btn-link">
 					<input type="checkbox" name="remember" id="remember"> Remember me
-				</label>
+				</label> -->
 				
-				<div>
-					<button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+				<div class="md-block">
+					<button type="submit" class="md-raised md-primary md-button md-default-theme btn-custom" ng-disabled="!loginForm.$valid">Login</button>
 				</div>
 				
 			</form>
@@ -147,6 +154,7 @@
 			<div class="login-div">
 				<button class="btn btn-lg btn-info">Login Using Google</button>
 				<button class="btn btn-lg btn-info">Login Using Facebook</button>
+        
 			</div>
 		</div>
 	</div>		
@@ -160,16 +168,24 @@
 
 <script type="text/ng-template" id="/lostPassword.html">
 	<div id="div-forms">
-		<form id="forget-password" method="POST" ng-submit="forgetPassword()">
+  <div class="form-header text-center">Forget Password</div>
+		<form id="forgetPassword" name="forgetPassword" ng-submit="forgetPassword()">
 			
 			<div class="modal-body">
-				<div class="form-header text-center">Forget Password</div>
-				<input id="lost_email" class="form-control" type="text" placeholder="E-Mail id/Username" required>
+				<md-input-container class="md-block">
+          <label >Username</label>
+          <input type="text" name="lostEmail" id="lostEmail" ng-model="forgetPassword.lost_email" ng-required="true" />
+          
+          <div ng-messages="forgetPassword.lostEmail.$error" ng-show="forgetPassword.lostEmail.$touched">
+            <div ng-message="required">Username/E-Mail is required.</div>
+          </div>
+        </md-input-container>
+				<!-- <input id="lost_email" class="form-control" type="text" placeholder="E-Mail id/Username" required> -->
 			</div>
 				
 			<div class="modal-footer">
 				<div>
-					<button type="submit" class="btn btn-primary btn-lg btn-block">Send</button>
+					<button type="submit" class="md-raised md-primary md-button md-default-theme btn-custom" ng-disabled="!forgetPassword.$valid">Send</button>
 				</div>
 				<div>
 					<button id="lost_login_btn" type="button" class="btn btn-link" ng-click="openLogin()">Log In</button>
@@ -182,57 +198,66 @@
 </script>
 
 <script type="text/ng-template" id="/registerWithUsForm.html">
-	<form id="registerWithUsForm" ng-submit="submitRegister()" method="POST" onsubmit="return registerValidate(this);">
+  <div class="form-header text-center">Register</div>
+	<form id="registerWithUsForm" name="registerWithUsForm" ng-submit="submitRegister()">
 		
-		<div class="modal-body">
-			<div class="form-header text-center">Register</div>
-			<span id="error2" class="hidden"></span>
-			<div class="form-group" id="name-box">
-				<label for="InputName">Username *</label>
-				<input type="text" name="registerName" class="form-control" id="registerName" placeholder="Name"
-				onblur="validate('registerName','name-box');">
-				<span id="registerNameerror" class="hidden"></span>
-			</div>
-			<div class="form-group" id="register-mail-box">
-				<label for="InputEmail">Email Id *</label>
-				<input type="email" class="form-control" name="registerEmail" id="registerEmail" placeholder="Email"
-				onblur="validate('registerEmail','register-mail-box');">
-				<span id="registerEmailerror" class="hidden"> </span>
-			</div>
-			<div class="form-group" id="password-box">
-				<label for="InputPassword">Password *</label>
-				<input type="password" class="form-control" name="registerPassword" id="registerPassword" placeholder="Password"
-				onblur="validate('registerPassword','password-box');">
-				<span id="registerPassworderror"> </span>
-			</div>
-			<div class="form-group" id="password1-box">
-				<label for="InputPasswordRepeat">Confirm Password: *</label>
-				<input type="password" class="form-control" name="registerPassword1" id="registerPassword1" placeholder="Confirm Password"
-				onblur="validate('registerPassword1','password1-box');">
-				<span id="registerPassword1error"> </span>
-			</div>
-			<div class="form-group" id="user-type-box">
-				<select id="typeOfRegister" class="form-control" onblur="validate('typeOfRegister','user-type-box')">
-					<option selected disabled>Select user type</option>
-					<option value="1">I am a teacher</option>
-					<option value="2">I am a student</option>
-				</select>
-				<span class="typeOfRegistererror"> </span>
-			</div>
-			<div class="form-group">
-				<label for="tnCcheckbox">
-					<input type="checkbox" id="tnCcheckbox" name="tnCcheckbox" value="T&C">
-					<font color="blue" ><i>I accept Terms and Conditions</i></font>
-				</label>
-				<span class="tnCcheckboxerror"> </span>
-				
-			</div>
-		</div>
+    
+    <md-input-container class="md-block">
+      <label >Username</label>
+      <input type="text" name="registerName" id="registerName" ng-model="register.registerName" ng-required="true" >
+      <div ng-messages="registerWithUsForm.registerName.$error" ng-show="registerWithUsForm.registerName.$touched">
+        <div ng-message="required">Username is required.</div>
+      </div>
+    </md-input-container>
+    
+    <md-input-container class="md-block">
+      
+        <label>Email Id</label>
+        <input type="email" name="registerEmail" id="registerEmail"  ng-model="register.registerEmail" ng-required="true"/>
+        <div ng-messages="registerWithUsForm.registerEmail.$error" ng-show="registerWithUsForm.registerEmail.$touched">
+          <div ng-message="required">Email Id is required.</div>
+        </div>
+        
+    </md-input-container>
+    
+    <md-input-container class="md-block">
+      <label for="InputPassword">Password</label>
+      <input type="password" id="registerPassword" name="registerPassword" ng-model="register.registerPassword" ng-required="true" minlength="4">
+      <div ng-messages="registerWithUsForm.registerPassword.$error" ng-show="registerWithUsForm.registerPassword.$touched">
+        <div ng-message="required">Password is required.</div>
+        <div ng-message="minlength">Password is too short!</div>
+      </div>
+    </md-input-container>					
 		
+    <md-input-container class="md-block">
+      <label for="InputPasswordRepeat">Re-enter Password</label>
+      <input type="password" id="InputPasswordRepeat" name="InputPasswordRepeat" ng-model="register.InputPasswordRepeat" password-match="registerPassword">
+      <!-- <div class="md-input-message-animation ng-scope" style="opacity: 1; margin-top: 0px;" ng-show="registerWithUsForm.InputPasswordRepeat.$error.pwmatch">
+        Passwords don't match manual.
+      </div> -->
+      <div ng-messages="registerWithUsForm.InputPasswordRepeat.$error" >
+        <div ng-message="pwmatch">Password doesn't match.</div>
+      </div>
+    </md-input-container>	
+
+    <md-input-container class="md-block">
+      <label>Select user type</label>
+      <md-select name="typeOfRegister" ng-model="register.typeOfRegister" required>
+        <md-option ng-value="1" >I am a Teacher</md-option>
+        <md-option ng-value="2" >I am a Student</md-option>
+      </md-select>
+      <div class="errors" ng-messages="registerWithUsForm.typeOfRegister.$error" ng-if="registerWithUsForm.typeOfRegister.$dirty">
+        <div ng-message="required">Required</div>
+      </div>
+    </md-input-container>    
+
 		<div class="modal-footer">
 			<div>
-				<button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>
+				<button type="submit" class="md-raised md-primary md-button md-default-theme btn-custom" ng-disabled="!registerWithUsForm.$valid">Register</button>
 			</div>
+      <div class="policyNote">
+          By Signing Up you agree to our <a href='#'>T&C</a> and <a href='#'>Privacy Policy</a>.
+      </div>
 			<div>
 				<button id="register_login_btn" type="button" class="btn btn-link" ng-click="openLogin()">Log In</button>
 				<button id="register_lost_btn" type="button" class="btn btn-link" ng-click="lostPassword()">Lost Password?</button>

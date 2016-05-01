@@ -44,3 +44,22 @@ appDirective.directive('modal',function(){
 	
 	
 });
+
+appDirective.directive('passwordMatch', function(){
+    return{
+      require: 'ngModel',
+        link: function (scope, elm, attrs, ctrl) {
+            var firstPassword = '#' + attrs.passwordMatch;
+            elm.add(firstPassword).on('keyup', function () {
+              scope.$apply(function () {
+                var v = elm.val()===$(firstPassword).val();
+                ctrl.$setValidity('pwmatch', v);
+                
+              });
+            });
+        
+    
+        }
+    }
+    
+});

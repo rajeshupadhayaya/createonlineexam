@@ -14,7 +14,7 @@ homeController.controller('home', ['$scope',
 homeController.controller('loginController',['$scope', '$http', '$location','$rootScope',
 		function($scope, $http,$location,$rootScope){
 			$rootScope.showModal = false;
-			$rootScope.user = {};
+			// $rootScope.user = {};
 			
 			$rootScope.openLogin  = function(){
 				
@@ -30,7 +30,8 @@ homeController.controller('loginController',['$scope', '$http', '$location','$ro
 				// $scope.showModal = !$scope.showModal;
 				$rootScope.currentTemplate = '/lostPassword.html';
 			};
-			
+		  
+      
 			$rootScope.submitLogin = function (){
 				$http({
 					method  : 'POST',
