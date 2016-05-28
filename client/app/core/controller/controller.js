@@ -1,9 +1,9 @@
 'use strict';
 
-var homeController = angular.module('homeController', ['ngAnimate','ngMaterial', 'ngMessages','ngAria']);
+var controllers = angular.module('homeController', ['ngAnimate','ngMaterial', 'ngMessages','ngAria']);
 
 
-homeController.controller('home', ['$scope',
+controllers.controller('home', ['$scope',
 	function($scope){
 		$scope.page='first page';
 		$scope.isCollapsed = false;
@@ -11,9 +11,11 @@ homeController.controller('home', ['$scope',
 
 ]);
 
-homeController.controller('loginController',['$scope', '$http', '$location','$rootScope',
+controllers.controller('loginController',['$scope', '$http', '$location','$rootScope',
 		function($scope, $http,$location,$rootScope){
 			$rootScope.showModal = false;
+      $rootScope.isLoggedin = false;
+      $rootScope.name = '';
 			// $rootScope.user = {};
 			
 			$rootScope.openLogin  = function(){
@@ -30,7 +32,36 @@ homeController.controller('loginController',['$scope', '$http', '$location','$ro
 				// $scope.showModal = !$scope.showModal;
 				$rootScope.currentTemplate = '/lostPassword.html';
 			};
-		  
+      
+      
+/////////////////////////////////////////////////////////////////////                        Facebook                        ///////////////////////////////////////////////////////////////
+      $rootScope.Fblogin = function($scope){
+        console.log('login click');
+     
+        FB.login(function(response){
+          if (response.authResponse) {
+            console.log("welcome   getng ur info");
+            $rootScope.isLoggedin  = true;
+            FB.api('/me', {
+              fields: 'email, birthday, gender, location, name, timezone, updated_time, picture'
+            },
+            function(response){
+              console.log(response.picture.data.url);
+              $rootScope.name = response.name;
+              $rootScope.profilePic = response.picture.data.url;
+              $rootScope.showModal = false;
+              $location.path('/create');
+              console.log(response);
+              
+            });
+          } else {
+            
+            console.log('Not authorize')
+          }
+          
+        }, {scope: 'public_profile, email'});
+        
+      };
       
 			$rootScope.submitLogin = function (){
 				$http({
@@ -48,7 +79,7 @@ homeController.controller('loginController',['$scope', '$http', '$location','$ro
 					} else {
 							$scope.message = data.message;
 							// $routeScope.isLogin = true;
-							$location.path('/dashboard').replace
+							$location.path('/create').replace
 					}
 				});
 			};
@@ -82,7 +113,7 @@ homeController.controller('loginController',['$scope', '$http', '$location','$ro
       .dark();
  });
 
-homeController.controller('examController', ['$scope', 
+controllers.controller('examController', ['$scope', 
 		function($scope){
 			$scope.ques = {};
 			$scope.titleName = 'Exam Create';
@@ -128,4 +159,10 @@ homeController.controller('examController', ['$scope',
 			
 		}
 ]);
+
+controllers.controller('dashboard', ['$scope',
+  function($scope){
+    
+  }
+])
 
